@@ -1,20 +1,14 @@
-import { Button, Frog, TextInput, parseEther } from "frog";
+import { Button, Frog, parseEther } from "frog";
 import { devtools } from "frog/dev";
 import { serveStatic } from "frog/serve-static";
-// import { neynar } from 'frog/hubs'
 import { handle } from "frog/vercel";
 import { abi } from "../lib/abi.js";
 
-// Uncomment to use Edge Runtime.
-// export const config = {
-//   runtime: 'edge',
-// }
 
 export const app = new Frog({
   assetsPath: "/",
   basePath: "/api",
-  // Supply a Hub to enable frame verification.
-  // hub: neynar({ apiKey: 'NEYNAR_FROG_FM' })
+  browserLocation: "https://thealbum.com",
 });
 
 app.transaction("/buy", (c) => {
@@ -33,11 +27,11 @@ app.transaction("/buy", (c) => {
 app.frame("/", (c) => {
   return c.res({
     image: "https://thealbum.com/og-image.png",
-    intents: [<Button.Transaction target="/buy" action="/complete">Buy Album</Button.Transaction>],
+    intents: [<Button.Transaction target="/buy" action="/receipt">Buy Album</Button.Transaction>],
   });
 });
 
-app.frame("/complete", (c) => {
+app.frame("/receipt", (c) => {
   const { transactionId } = c;
   const explorerUrl = `https://basescan.org/tx/${transactionId}`;
   return c.res({
