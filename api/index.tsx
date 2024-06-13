@@ -27,6 +27,7 @@ app.transaction("/buy", (c) => {
 app.frame("/", (c) => {
   return c.res({
     image: "https://thealbum.com/og-image.png",
+    title: "The Album",
     intents: [<Button.Transaction target="/buy" action="/receipt">Buy Album</Button.Transaction>],
   });
 });
