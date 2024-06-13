@@ -4,11 +4,11 @@ import { serveStatic } from "frog/serve-static";
 import { handle } from "frog/vercel";
 import { abi } from "../lib/abi.js";
 
-
 export const app = new Frog({
   assetsPath: "/",
   basePath: "/api",
   browserLocation: "https://thealbum.com",
+  origin: "https://the-album.terminally.online",
 });
 
 app.transaction("/buy", (c) => {
@@ -20,7 +20,7 @@ app.transaction("/buy", (c) => {
     args: [1n, address as `0x${string}`],
     to: "0x0615cfa29ab591299f52211c1df7a89526c9f36a",
     value: parseEther("0.00028"),
-    attribution: true
+    attribution: true,
   });
 });
 
@@ -28,7 +28,11 @@ app.frame("/", (c) => {
   return c.res({
     image: "https://thealbum.com/og-image.png",
     title: "The Album",
-    intents: [<Button.Transaction target="/buy" action="/receipt">Buy Album</Button.Transaction>],
+    intents: [
+      <Button.Transaction target="/buy" action="/receipt">
+        Buy Album
+      </Button.Transaction>,
+    ],
   });
 });
 
@@ -37,8 +41,11 @@ app.frame("/receipt", (c) => {
   const explorerUrl = `https://basescan.org/tx/${transactionId}`;
   return c.res({
     image: "https://thealbum.com/og-image.png",
-    intents: [<Button.Link href={explorerUrl}>View on Basescan</Button.Link>,
-      <Button.Link href="https://www.thealbum.com/leaderboard">Leaderboard</Button.Link>
+    intents: [
+      <Button.Link href={explorerUrl}>View on Basescan</Button.Link>,
+      <Button.Link href="https://www.thealbum.com/leaderboard">
+        Leaderboard
+      </Button.Link>,
     ],
   });
 });
