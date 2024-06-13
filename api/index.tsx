@@ -25,14 +25,26 @@ app.transaction("/buy", (c) => {
     functionName: "purchase",
     args: [1n, address as `0x${string}`],
     to: "0x0615cfa29ab591299f52211c1df7a89526c9f36a",
-    value: parseEther("0.00028")
+    value: parseEther("0.00028"),
+    attribution: true
   });
 });
 
 app.frame("/", (c) => {
   return c.res({
     image: "https://thealbum.com/og-image.png",
-    intents: [<Button.Transaction target="/buy">Buy Album</Button.Transaction>],
+    intents: [<Button.Transaction target="/buy" action="/complete">Buy Album</Button.Transaction>],
+  });
+});
+
+app.frame("/complete", (c) => {
+  const { transactionId } = c;
+  const explorerUrl = `https://basescan.org/tx/${transactionId}`;
+  return c.res({
+    image: "https://thealbum.com/og-image.png",
+    intents: [<Button.Link href={explorerUrl}>View on Basescan</Button.Link>,
+      <Button.Link href="https://www.thealbum.com/leaderboard">Leaderboard</Button.Link>
+    ],
   });
 });
 
